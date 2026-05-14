@@ -1,0 +1,1296 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบจัดการคุณภาพ - QMS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #0f1059;
+            --primary-light: #1a1f7f;
+            --primary-dark: #0a0a3d;
+            --accent-color: #4a90e2;
+            --accent-light: #5ba3ff;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --bg-color: #f5f7fa;
+            --text-color: #333;
+            --border-color: #ddd;
+            --card-bg: #0f1059;
+            --card-hover: #1a1f7f;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Tahoma', 'Noto Sans Thai', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 2rem;
+            max-width: 100%;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-img {
+            height: 50px;
+            width: auto;
+            filter: brightness(0) invert(1);
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo-text-main {
+            font-size: 1.2rem;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .logo-text-sub {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 0.2rem;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .search-box {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 0.5rem 1rem;
+            color: white;
+            width: 200px;
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus {
+            outline: none;
+            background-color: rgba(255, 255, 255, 0.15);
+            border-color: var(--accent-color);
+        }
+
+        .search-box::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .header-icons {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .icon-btn:hover {
+            color: var(--accent-light);
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            background-color: var(--accent-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .user-avatar:hover {
+            background-color: #357abd;
+        }
+
+        /* Navigation Bar */
+        .nav-bar {
+            background-color: var(--primary-light);
+            display: flex;
+            align-items: center;
+            overflow-x: auto;
+            padding: 0 2rem;
+            max-width: 100%;
+        }
+
+        .nav-container {
+            display: flex;
+            gap: 0;
+            width: 100%;
+        }
+
+        .nav-item {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+            text-decoration: none;
+            white-space: nowrap;
+            border-bottom: 3px solid transparent;
+            position: relative;
+        }
+
+        .nav-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .nav-item.active {
+            color: white;
+            border-bottom-color: var(--accent-color);
+            background-color: rgba(74, 144, 226, 0.2);
+        }
+
+        .nav-icon {
+            font-size: 1.1rem;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            background-color: white;
+            padding: 0.8rem 2rem;
+            font-size: 0.9rem;
+            border-bottom: 1px solid var(--border-color);
+            max-width: 100%;
+        }
+
+        .breadcrumb a {
+            color: var(--accent-color);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .page-title {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-bottom: 0;
+        }
+
+        .page-subtitle {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Department Grid */
+        .department-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .department-card {
+            background: linear-gradient(135deg, var(--card-bg) 0%, var(--card-hover) 100%);
+            border-radius: 12px;
+            padding: 2rem;
+            color: white;
+            box-shadow: 0 4px 15px rgba(15, 16, 89, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            min-height: 180px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .department-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 25px rgba(15, 16, 89, 0.3);
+            background: linear-gradient(135deg, var(--card-hover) 0%, #252d9f 100%);
+        }
+
+        .dept-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dept-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .dept-count {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Dashboard Content Grid */
+        .dashboard-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Section Card */
+        .section-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .section-title svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .view-all {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .view-all:hover {
+            color: var(--accent-light);
+        }
+
+        /* Announcement Item */
+        .announcement-item {
+            padding: 1.2rem;
+            background-color: #f8f9fa;
+            border-left: 4px solid var(--accent-color);
+            margin-bottom: 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .announcement-item:hover {
+            background-color: #f0f2f5;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .announcement-date {
+            font-size: 0.85rem;
+            color: #999;
+            margin-bottom: 0.5rem;
+        }
+
+        .announcement-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.3rem;
+        }
+
+        .announcement-content {
+            font-size: 0.95rem;
+            color: #555;
+        }
+
+        /* Document Item */
+        .document-item {
+            padding: 1.2rem;
+            background-color: #f8f9fa;
+            border-left: 4px solid var(--primary-color);
+            margin-bottom: 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .document-item:hover {
+            background-color: #f0f2f5;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .document-icon {
+            font-size: 1.5rem;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: white;
+            border-radius: 6px;
+            flex-shrink: 0;
+        }
+
+        .document-content {
+            flex: 1;
+        }
+
+        .document-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.3rem;
+        }
+
+        .document-date {
+            font-size: 0.85rem;
+            color: #999;
+        }
+
+        .document-status {
+            margin-left: auto;
+            flex-shrink: 0;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.4rem 0.8rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-new {
+            background-color: #d4edda;
+            color: var(--success-color);
+        }
+
+        .status-updated {
+            background-color: #cfe2ff;
+            color: var(--accent-color);
+        }
+
+        .status-review {
+            background-color: #fff3cd;
+            color: var(--warning-color);
+        }
+
+        /* Contact Card */
+        .contact-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .contact-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .contact-title {
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .contact-item {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .contact-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .contact-label {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-value {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        /* Table Styles */
+        .table-section {
+            background-color: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            overflow-x: auto;
+            margin-bottom: 2rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.7rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-light);
+            box-shadow: 0 4px 12px rgba(15, 16, 89, 0.3);
+        }
+
+        .btn-secondary {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #357abd;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 3rem;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .dashboard-content {
+                grid-template-columns: 1fr;
+            }
+
+            .department-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-top {
+                padding: 0.8rem 1rem;
+                flex-wrap: wrap;
+            }
+
+            .logo {
+                gap: 0.5rem;
+            }
+
+            .logo-img {
+                height: 40px;
+            }
+
+            .search-box {
+                width: 150px;
+            }
+
+            .header-right {
+                gap: 1rem;
+            }
+
+            .nav-item {
+                padding: 0.8rem 1rem;
+                font-size: 0.85rem;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .department-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .dept-name {
+                font-size: 1.1rem;
+            }
+
+            .section-card,
+            .contact-card,
+            .table-section {
+                padding: 1.5rem;
+            }
+
+            .dashboard-content {
+                gap: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-top">
+            <div class="logo">
+                <img src="Logo.png" alt="NDC Logo" class="logo-img">
+                <div class="logo-text">
+                    <div class="logo-text-main">QMS</div>
+                    <div class="logo-text-sub">Quality Management System</div>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="header-actions">
+                    <input type="text" class="search-box" placeholder="ค้นหา...">
+                    <div class="header-icons">
+                        <div class="user-avatar">A</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Horizontal Navigation Bar -->
+        <nav class="nav-bar">
+            <div class="nav-container">
+                <a href="#dashboard" class="nav-item active" data-section="dashboard">
+                    <span class="nav-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="2" x2="12" y2="22"></line>
+                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                        </svg>
+                    </span>
+                    <span>หน้าหลัก</span>
+                </a>
+                <a href="#announcement" class="nav-item" data-section="announcement">
+                    <span class="nav-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                    </span>
+                    <span>ประกาศและข้อมูลข่าวสาร</span>
+                </a>
+                <a href="#documents" class="nav-item" data-section="documents">
+                    <span class="nav-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+                            <polyline points="13 2 13 9 20 9"></polyline>
+                        </svg>
+                    </span>
+                    <span>ควบคุมเอกสาร</span>
+                </a>
+                <a href="#dar" class="nav-item" data-section="dar">
+                    <span class="nav-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                            <circle cx="18.5" cy="2.5" r="4.5"></circle>
+                        </svg>
+                    </span>
+                    <span>DAR</span>
+                </a>
+                <a href="#kpi" class="nav-item" data-section="kpi">
+                    <span class="nav-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="2" x2="12" y2="22"></line>
+                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                        </svg>
+                    </span>
+                    <span>KPI</span>
+                </a>
+                <a href="#audit" class="nav-item" data-section="audit">
+                    <span class="nav-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                    </span>
+                    <span>การตรวจสอบ</span>
+                </a>
+                <a href="#logs" class="nav-item" data-section="logs">
+                    <span class="nav-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="12" y1="19" x2="12" y2="19"></line>
+                        </svg>
+                    </span>
+                    <span>บันทึกระบบ</span>
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+        <span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="display: inline; margin-right: 0.3rem;">
+                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"></path>
+            </svg>
+            <a href="#">ระบบการจัดการคุณภาพ</a>
+        </span> >
+        <span><a href="#">หน้าหลัก</a></span>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="active">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">📊 แผนกต่างๆ</h1>
+                    <p class="page-subtitle">ระบบการจัดการคุณภาพ (Quality Management System)</p>
+                </div>
+            </div>
+
+            <!-- Department Grid -->
+            <div class="department-grid">
+                <div class="department-card">
+                    <div class="dept-icon">
+                        <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                            <polyline points="12 3 20 7.46 20 16.46 12 21 4 16.46 4 7.46 12 3"></polyline>
+                            <line x1="12" y1="12" x2="20" y2="7.46"></line>
+                            <line x1="12" y1="12" x2="12" y2="21"></line>
+                            <line x1="12" y1="12" x2="4" y2="7.46"></line>
+                        </svg>
+                    </div>
+                    <div class="dept-name">IT</div>
+                    <div class="dept-count">11 เอกสาร</div>
+                </div>
+                <div class="department-card">
+                    <div class="dept-icon">
+                        <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.35-4.35"></path>
+                        </svg>
+                    </div>
+                    <div class="dept-name">QA</div>
+                    <div class="dept-count">12 เอกสาร</div>
+                </div>
+                <div class="department-card">
+                    <div class="dept-icon">
+                        <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                            <circle cx="9" cy="21" r="1"></circle>
+                            <circle cx="20" cy="21" r="1"></circle>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                        </svg>
+                    </div>
+                    <div class="dept-name">จัดซื้อ</div>
+                    <div class="dept-count">5 เอกสาร</div>
+                </div>
+                <div class="department-card">
+                    <div class="dept-icon">
+                        <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                            <path d="M12 9v2m0 4v2m0-12V3m0 18v2"></path>
+                            <path d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"></path>
+                        </svg>
+                    </div>
+                    <div class="dept-name">ความปลอดภัย</div>
+                    <div class="dept-count">10 เอกสาร</div>
+                </div>
+                <div class="department-card">
+                    <div class="dept-icon">
+                        <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                    </div>
+                    <div class="dept-name">ทรัพยากรบุคคล</div>
+                    <div class="dept-count">10 เอกสาร</div>
+                </div>
+                <div class="department-card">
+                    <div class="dept-icon">
+                        <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                            <path d="M16 3h-2v4H8V3H6v4"></path>
+                        </svg>
+                    </div>
+                    <div class="dept-name">QMS</div>
+                    <div class="dept-count">12 เอกสาร</div>
+                </div>
+            </div>
+
+            <!-- Dashboard Content Grid -->
+            <div class="dashboard-content">
+                <!-- Announcements Section -->
+                <div class="section-card">
+                    <div class="section-header">
+                        <span class="section-title">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                            </svg>
+                            ประกาศล่าสุด
+                        </span>
+                        <a href="#" class="view-all" onclick="navigateToSection('announcement'); return false;">ดูทั้งหมด →</a>
+                    </div>
+
+                    <div class="announcement-item">
+                        <div class="announcement-date">14/05/2569</div>
+                        <div class="announcement-title">ประกาศเกี่ยวกับการสอบ ISO 9001</div>
+                        <div class="announcement-content">บริษัทจะทำการตรวจสอบ ISO 9001 ในวันที่ 20 พฤษภาคม 2569</div>
+                    </div>
+
+                    <div class="announcement-item">
+                        <div class="announcement-date">10/05/2569</div>
+                        <div class="announcement-title">นโยบายการควบคุมเอกสารใหม่</div>
+                        <div class="announcement-content">มีการเปลี่ยนแปลงขั้นตอนการกำหนดหมายเลขเอกสาร</div>
+                    </div>
+
+                    <div class="announcement-item">
+                        <div class="announcement-date">05/05/2569</div>
+                        <div class="announcement-title">ผลการตรวจสอบภายใน</div>
+                        <div class="announcement-content">ผลการตรวจสอบภายในเดือนพฤษภาคม พร้อมให้ดูในส่วนการตรวจสอบ</div>
+                    </div>
+                </div>
+
+                <!-- Documents Section -->
+                <div class="section-card">
+                    <div class="section-header">
+                        <span class="section-title">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+                                <polyline points="13 2 13 9 20 9"></polyline>
+                            </svg>
+                            เอกสารล่าสุด
+                        </span>
+                        <a href="#" class="view-all" onclick="navigateToSection('documents'); return false;">ดูทั้งหมด →</a>
+                    </div>
+
+                    <div class="document-item">
+                        <div class="document-icon">📄</div>
+                        <div class="document-content">
+                            <div class="document-title">QP-001 นโยบายคุณภาพ ฉบับที่ 5</div>
+                            <div class="document-date">ลงวันที่ 08/05/2569</div>
+                        </div>
+                        <div class="document-status">
+                            <span class="status-badge status-new">ใหม่</span>
+                        </div>
+                    </div>
+
+                    <div class="document-item">
+                        <div class="document-icon">📋</div>
+                        <div class="document-content">
+                            <div class="document-title">QP-002 ขั้นตอนการควบคุมเอกสาร ฉบับที่ 3</div>
+                            <div class="document-date">ลงวันที่ 01/05/2569</div>
+                        </div>
+                        <div class="document-status">
+                            <span class="status-badge status-updated">อัปเดต</span>
+                        </div>
+                    </div>
+
+                    <div class="document-item">
+                        <div class="document-icon">📘</div>
+                        <div class="document-content">
+                            <div class="document-title">WI-DC-003 คำแนะนำการกำหนดหมายเลขเอกสาร</div>
+                            <div class="document-date">ลงวันที่ 20/04/2569</div>
+                        </div>
+                        <div class="document-status">
+                            <span class="status-badge status-updated">อัปเดต</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Card -->
+            <div class="contact-card">
+                <div class="contact-header">
+                    <div class="contact-title">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"></path>
+                            <path d="M16 12a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"></path>
+                        </svg>
+                        ติดต่อเอกสาร
+                    </div>
+                </div>
+
+                <div class="contact-item">
+                    <div class="contact-label">ชื่อผู้ติดต่อ</div>
+                    <div class="contact-value">สมศรรค์ มีชัย</div>
+                    <div class="contact-label">ผู้บริหารแผนก</div>
+                </div>
+
+                <div class="contact-item">
+                    <div class="contact-label">📞 เบอร์โทรศัพท์</div>
+                    <div class="contact-value">02-XXXX-XXXX ต่อ 200</div>
+                </div>
+
+                <div class="contact-item">
+                    <div class="contact-label">✉️ อีเมล</div>
+                    <div class="contact-value">doccmtrol@ndc-industrial.com</div>
+                </div>
+
+                <div class="contact-item">
+                    <div class="contact-label">🕐 เวลาทำการ</div>
+                    <div class="contact-value">จันทร์-ศุกร์ 08:00-17:00</div>
+                    <div class="contact-label">ตามปฏิทินทำการ</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Announcements Section -->
+        <section id="announcement" style="display: none;">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">📢 ประกาศและข้อมูลข่าวสาร</h1>
+                    <p class="page-subtitle">ข่าวสารและการอัพเดตล่าสุด</p>
+                </div>
+            </div>
+
+            <div class="table-section">
+                <div class="action-buttons">
+                    <button class="btn btn-primary">+ สร้างประกาศใหม่</button>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>วันที่</th>
+                            <th>หัวข้อ</th>
+                            <th>เนื้อหา</th>
+                            <th>สถานะ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>14/05/2569</td>
+                            <td>ประกาศเกี่ยวกับการสอบ ISO 9001</td>
+                            <td>บริษัทจะทำการตรวจสอบ ISO 9001 ในวันที่ 20 พฤษภาคม 2569</td>
+                            <td><span class="status-badge status-new">ใหม่</span></td>
+                        </tr>
+                        <tr>
+                            <td>10/05/2569</td>
+                            <td>นโยบายการควบคุมเอกสารใหม่</td>
+                            <td>มีการเปลี่ยนแปลงขั้นตอนการกำหนดหมายเลขเอกสาร</td>
+                            <td><span class="status-badge status-updated">อัปเดต</span></td>
+                        </tr>
+                        <tr>
+                            <td>05/05/2569</td>
+                            <td>ผลการตรวจสอบภายใน</td>
+                            <td>ผลการตรวจสอบภายในเดือนพฤษภาคม พร้อมให้ดูในส่วนการตรวจสอบ</td>
+                            <td><span class="status-badge status-review">ทบทวน</span></td>
+                        </tr>
+                        <tr>
+                            <td>01/05/2569</td>
+                            <td>การอบรมคุณภาพประจำไตรมาส</td>
+                            <td>การอบรมคุณภาพประจำไตรมาสที่สองจะเริ่มในวันที่ 15 พฤษภาคม</td>
+                            <td><span class="status-badge status-new">ใหม่</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Document Control Section -->
+        <section id="documents" style="display: none;">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">📄 ควบคุมเอกสาร</h1>
+                    <p class="page-subtitle">การจัดการและติดตามเอกสารองค์กรทั้งหมด</p>
+                </div>
+            </div>
+
+            <div class="table-section">
+                <div class="action-buttons">
+                    <button class="btn btn-primary">+ อัปโหลดเอกสารใหม่</button>
+                    <button class="btn btn-secondary">ส่งออก</button>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>รหัสเอกสาร</th>
+                            <th>ชื่อเอกสาร</th>
+                            <th>เวอร์ชัน</th>
+                            <th>ผู้เขียน</th>
+                            <th>วันที่แก้ไข</th>
+                            <th>สถานะ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>DOC-001</td>
+                            <td>นโยบายคุณภาพ</td>
+                            <td>v3.2</td>
+                            <td>จอห์น สมิธ</td>
+                            <td>10/05/2569</td>
+                            <td><span class="status-badge status-new">ใช้งาน</span></td>
+                        </tr>
+                        <tr>
+                            <td>DOC-002</td>
+                            <td>คู่มือกระบวนการ</td>
+                            <td>v2.1</td>
+                            <td>เจน โดว์</td>
+                            <td>28/04/2569</td>
+                            <td><span class="status-badge status-new">ใช้งาน</span></td>
+                        </tr>
+                        <tr>
+                            <td>DOC-003</td>
+                            <td>คู่มือการปฏิบัติตามข้อกำหนด</td>
+                            <td>v1.5</td>
+                            <td>มาร์ค จอห์นสัน</td>
+                            <td>15/04/2569</td>
+                            <td><span class="status-badge status-review">รอการทบทวน</span></td>
+                        </tr>
+                        <tr>
+                            <td>DOC-004</td>
+                            <td>วัสดุการอบรม</td>
+                            <td>v1.0</td>
+                            <td>แซราห์ วิลเลียมส์</td>
+                            <td>30/03/2569</td>
+                            <td><span class="status-badge status-updated">เก็บถาวร</span></td>
+                        </tr>
+                        <tr>
+                            <td>DOC-005</td>
+                            <td>การประเมินความเสี่ยง</td>
+                            <td>v2.0</td>
+                            <td>โรเบิร์ต บราวน์</td>
+                            <td>12/05/2569</td>
+                            <td><span class="status-badge status-new">ใช้งาน</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- DAR Section -->
+        <section id="dar" style="display: none;">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">📝 บันทึกการออกแบบและวิเคราะห์ (DAR)</h1>
+                    <p class="page-subtitle">ติดตามเอกสารการออกแบบและการวิเคราะห์</p>
+                </div>
+            </div>
+
+            <div class="table-section">
+                <div class="action-buttons">
+                    <button class="btn btn-primary">+ สร้าง DAR ใหม่</button>
+                    <button class="btn btn-secondary">สร้างรายงาน</button>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>รหัส DAR</th>
+                            <th>ชื่อเรื่อง</th>
+                            <th>โครงการ</th>
+                            <th>มอบหมายให้</th>
+                            <th>วันครบกำหนด</th>
+                            <th>สถานะ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>DAR-001</td>
+                            <td>การวิเคราะห์การออกแบบผลิตภัณฑ์</td>
+                            <td>โครงการ อัลฟา</td>
+                            <td>ทีมวิศวกรรม</td>
+                            <td>28/05/2569</td>
+                            <td><span class="status-badge status-new">กำลังดำเนิน</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- KPI Section -->
+        <section id="kpi" style="display: none;">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">📈 ตัวชี้วัดประสิทธิภาพหลัก (KPI)</h1>
+                    <p class="page-subtitle">ตรวจสอบตัวชี้วัดประสิทธิภาพขององค์กร</p>
+                </div>
+            </div>
+
+            <div class="table-section">
+                <div class="action-buttons">
+                    <button class="btn btn-primary">+ เพิ่ม KPI ใหม่</button>
+                    <button class="btn btn-secondary">ดูการวิเคราะห์</button>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ชื่อ KPI</th>
+                            <th>เป้าหมาย</th>
+                            <th>ปัจจุบัน</th>
+                            <th>หน่วย</th>
+                            <th>สถานะ</th>
+                            <th>เจ้าของ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>การส่งมอบตรงเวลา</td>
+                            <td>95%</td>
+                            <td>94.2%</td>
+                            <td>%</td>
+                            <td><span class="status-badge status-review">ใกล้เป้าหมาย</span></td>
+                            <td>โลจิสติกส์</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Audit Section -->
+        <section id="audit" style="display: none;">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">✓ การบริหารการตรวจสอบ</h1>
+                    <p class="page-subtitle">ติดตามการตรวจสอบภายในและภายนอก</p>
+                </div>
+            </div>
+
+            <div class="table-section">
+                <div class="action-buttons">
+                    <button class="btn btn-primary">+ กำหนดการตรวจสอบ</button>
+                    <button class="btn btn-secondary">ดูรายงาน</button>
+                </div>
+
+                <h3 style="color: var(--primary-color); margin-top: 2rem; margin-bottom: 1rem; padding-top: 1rem; border-top: 2px solid var(--primary-color);">การตรวจสอบภายใน</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>รหัสการตรวจสอบ</th>
+                            <th>แผนก</th>
+                            <th>วันที่กำหนด</th>
+                            <th>ผู้ตรวจสอบ</th>
+                            <th>ข้อค้นพบ</th>
+                            <th>สถานะ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>IA-001</td>
+                            <td>การผลิต</td>
+                            <td>20/05/2569</td>
+                            <td>โรเบิร์ต บราวน์</td>
+                            <td>3 เล็กน้อย</td>
+                            <td><span class="status-badge status-new">กำหนดการ</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Logs Section -->
+        <section id="logs" style="display: none;">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">📋 บันทึกระบบ</h1>
+                    <p class="page-subtitle">ติดตามกิจกรรมและการดำเนินการของผู้ใช้ทั้งหมด</p>
+                </div>
+            </div>
+
+            <div class="table-section">
+                <div class="action-buttons">
+                    <button class="btn btn-secondary">ส่งออกบันทึก</button>
+                    <button class="btn btn-secondary">กรองตามวันที่</button>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>เวลา</th>
+                            <th>ผู้ใช้</th>
+                            <th>การดำเนินการ</th>
+                            <th>โมดูล</th>
+                            <th>สถานะ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>14/05/2569 14:32:15</td>
+                            <td>จอห์น สมิธ</td>
+                            <td>อัปโหลดเอกสาร</td>
+                            <td>การควบคุมเอกสาร</td>
+                            <td><span class="status-badge status-new">สำเร็จ</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2569 บริษัท เอ็นดีซี อินดัสทริเอล จำกัด | NDC INDUSTRIAL COMPANY LIMITED | Company Center v1.0</p>
+    </footer>
+
+    <script>
+        // Navigation Section Switching
+        const navItems = document.querySelectorAll('.nav-item');
+        const sections = document.querySelectorAll('section');
+
+        navItems.forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                // Remove active class from all nav items and sections
+                navItems.forEach(nav => nav.classList.remove('active'));
+                sections.forEach(section => section.style.display = 'none');
+
+                // Add active class to clicked nav item and corresponding section
+                this.classList.add('active');
+                const sectionId = this.getAttribute('data-section');
+                const section = document.getElementById(sectionId);
+                if (section) {
+                    section.style.display = 'block';
+                }
+
+                // Scroll to top
+                window.scrollTo(0, 0);
+            });
+        });
+
+        // Navigate to section function for "View All" links
+        function navigateToSection(sectionId) {
+            const navItem = document.querySelector(`[data-section="${sectionId}"]`);
+            if (navItem) {
+                navItem.click();
+            }
+        }
+
+        // Department Card Click Navigation
+        document.querySelectorAll('.department-card').forEach((card, index) => {
+            card.addEventListener('click', function() {
+                const navItem = document.querySelector('[data-section="documents"]');
+                if (navItem) {
+                    navItem.click();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
